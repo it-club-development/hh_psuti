@@ -26,6 +26,8 @@ dependencies {
 	//implementation("javax.xml.bind:jaxb-api:4.0.1")							// Преобразует Java объекты в XML и обратно
 	//обновление 30.07.26
 	implementation("javax.servlet:javax.servlet-api:4.0.1")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.postgresql:postgresql")
 	//
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
