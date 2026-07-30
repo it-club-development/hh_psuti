@@ -9,7 +9,7 @@ import javax.crypto.SecretKey;
 
 @Component
 public class JWT_util {
-    private String secret = "mySecretKey123456789012345678901234567890";
+    private String secret= System.getenv("secck");
     private long expiration = 86400000;
 
     private SecretKey getSigningKey() {
