@@ -24,6 +24,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security:3.4.0")	// Добавляет безопасность и шифрование паролей
 	implementation("io.jsonwebtoken:jjwt:0.12.6")							// Создаёт и проверяет JWT токены
 	implementation("javax.xml.bind:jaxb-api:4.0.1")							// Преобразует Java объекты в XML и обратно
+	//обновление 30.07.26
+	implementation("javax.servlet:javax.servlet-api:4.0.1")
 	//
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
