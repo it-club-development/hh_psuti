@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.aut;
 
 public class user {
     private String email;
