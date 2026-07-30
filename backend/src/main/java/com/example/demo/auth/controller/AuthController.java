@@ -1,5 +1,8 @@
-package com.example.demo.aut;
+package com.example.demo.auth.controller;
 
+import com.example.demo.auth.security.JWT_util;
+import com.example.demo.auth.service.UserService;
+import com.example.demo.auth.model.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,4 +1,4 @@
-package com.example.demo.aut;
+package com.example.demo.auth.model;
 
 public class user {
     private String email;

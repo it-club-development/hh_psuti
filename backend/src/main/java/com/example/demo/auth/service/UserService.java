@@ -1,4 +1,4 @@
-package com.example.demo.aut;
+package com.example.demo.auth.service;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
