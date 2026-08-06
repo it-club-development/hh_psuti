@@ -1,22 +1,10 @@
 package com.example.demo.auth.controller;
-/* было
-import com.example.demo.auth.security.JWT_util;
-import com.example.demo.auth.service.UserService;
-import com.example.demo.auth.model.user;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-*/
-//стало
-import com.example.demo.auth.dto.AuthRequest;
-import com.example.demo.auth.dto.AuthResponse;
-import com.example.demo.auth.dto.RegisterRequest;
-import com.example.demo.auth.model.user;
-import com.example.demo.auth.repository.UserRepository;
+
+import com.example.demo.auth.dto.*;
+import com.example.demo.auth.model.CompanyEntity;
+import com.example.demo.auth.model.StudentEntity;
+import com.example.demo.auth.repository.CompanyRepository;
+import com.example.demo.auth.repository.StudentRepository;
 import com.example.demo.auth.security.JWT_util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,50 +17,86 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
     @Autowired
-    private UserRepository userRepository;
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private CompanyRepository employerRepository;
 
     @Autowired
     private JWT_util jwtUtil;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        // Проверка существования пользователя
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+    @PostMapping("/register/student")
+    public ResponseEntity<AuthResponse> registerStudent(@RequestBody StudentRegisterRequest request) {
+        if (studentRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new AuthResponse("Email already exists"));
         }
 
-        user user = new user();
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.save(user);
+        StudentEntity student = new StudentEntity();
+        student.setEmail(request.getEmail());
+        student.setPassword(passwordEncoder.encode(request.getPassword()));
+        student.setName(request.getName());
+        student.setUniversity(request.getUniversity());
+        student.setFaculty(request.getFaculty());
+        student.setCourse(request.getCourse());
+        student.setSpecialty(request.getSpecialty());
+        student.setBirthDate(request.getBirthDate());
+        student.setPhoneNumber(request.getPhoneNumber());
+
+        studentRepository.save(student);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new AuthResponse("User registered successfully"));
+                .body(new AuthResponse("Student registered successfully"));
+    }
+
+    @PostMapping("/register/employer")
+    public ResponseEntity<AuthResponse> registerEmployer(@RequestBody CompanyRegisterRequest request) {
+        if (employerRepository.findByEmail(request.getEmail()).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new AuthResponse("Email already exists"));
+        }
+
+        CompanyEntity employer = new CompanyEntity();
+        employer.setEmail(request.getEmail());
+        employer.setPassword(passwordEncoder.encode(request.getPassword()));
+        employer.setName(request.getName());
+        employer.setCompanyName(request.getCompanyName());
+        employer.setPosition(request.getPosition());
+        employer.setDepartment(request.getDepartment());
+        employer.setCompanyPhone(request.getCompanyPhone());
+        employer.setCompanyAddress(request.getCompanyAddress());
+        employer.setWebsite(request.getWebsite());
+
+        employerRepository.save(employer);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new AuthResponse("Employer registered successfully"));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        user user = userRepository.findByEmail(request.getEmail())
-                .orElse(null);
-
-        if (user == null) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthResponse("User not found"));
+        // Проверяем среди студентов
+        StudentEntity student = studentRepository.findByEmail(request.getEmail()).orElse(null);
+        if (student != null && passwordEncoder.matches(request.getPassword(), student.getPassword())) {
+            String token = jwtUtil.generateToken(student.getEmail());
+            return ResponseEntity.ok(new AuthResponse(token, student.getEmail()));
         }
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthResponse("Invalid password"));
+        // Проверяем среди работодателей
+        CompanyEntity employer = employerRepository.findByEmail(request.getEmail()).orElse(null);
+        if (employer != null && passwordEncoder.matches(request.getPassword(), employer.getPassword())) {
+            String token = jwtUtil.generateToken(employer.getEmail());
+            return ResponseEntity.ok(new AuthResponse(token, employer.getEmail()));
         }
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        return ResponseEntity.ok(new AuthResponse(token, user.getEmail()));
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new AuthResponse("Invalid email or password"));
     }
 }

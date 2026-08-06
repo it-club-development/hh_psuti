@@ -28,6 +28,8 @@ dependencies {
 	implementation("javax.servlet:javax.servlet-api:4.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql")
+	//обновление 05.08.26
+	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	//
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")

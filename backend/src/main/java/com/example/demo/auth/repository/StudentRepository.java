@@ -4,6 +4,6 @@ import com.example.demo.auth.model.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<StudentEntity, Long> {
+public interface  StudentRepository extends JpaRepository<StudentEntity, Long>{
     Optional<StudentEntity> findByEmail(String email);
 }

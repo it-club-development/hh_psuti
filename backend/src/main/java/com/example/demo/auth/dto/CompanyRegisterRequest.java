@@ -1,14 +1,9 @@
-package com.example.demo.auth.model;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.util.UUID;
-@Entity
-@Table(name = "Сompany")
-public class СompanyEntity extends user{
+package com.example.demo.auth.dto;
+
+public class CompanyRegisterRequest {
+    private String email;
+    private String password;
+    private String name;
     private String companyName;
     private String position;
     private String department;
@@ -17,6 +12,12 @@ public class СompanyEntity extends user{
     private String website;
 
     // приём и отдача
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     public String getCompanyName() { return companyName; }
     public void setCompanyName(String companyName) { this.companyName = companyName; }
     public String getPosition() { return position; }
