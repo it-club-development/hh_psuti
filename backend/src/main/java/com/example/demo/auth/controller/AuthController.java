@@ -1,7 +1,7 @@
 package com.example.demo.auth.controller;
 
 import com.example.demo.auth.dto.*;
-import com.example.demo.auth.model.CompanyEntity;
+import com.example.demo.auth.model.СompanyEntity;
 import com.example.demo.auth.model.StudentEntity;
 import com.example.demo.auth.repository.CompanyRepository;
 import com.example.demo.auth.repository.StudentRepository;
@@ -61,16 +61,16 @@ public class AuthController {
                     .body(new AuthResponse("Email already exists"));
         }
 
-        CompanyEntity employer = new CompanyEntity();
-        employer.setEmail(request.getEmail());
-        employer.setPassword(passwordEncoder.encode(request.getPassword()));
-        employer.setName(request.getName());
-        employer.setCompanyName(request.getCompanyName());
-        employer.setPosition(request.getPosition());
-        employer.setDepartment(request.getDepartment());
-        employer.setCompanyPhone(request.getCompanyPhone());
-        employer.setCompanyAddress(request.getCompanyAddress());
-        employer.setWebsite(request.getWebsite());
+        CompanyEntity company = new CompanyEntity();
+        company.setEmail(request.getEmail());
+        company.setPassword(passwordEncoder.encode(request.getPassword()));
+        company.setName(request.getName());
+        company.setCompanyName(request.getCompanyName());
+        company.setPosition(request.getPosition());
+        company.setDepartment(request.getDepartment());
+        company.setCompanyPhone(request.getCompanyPhone());
+        company.setCompanyAddress(request.getCompanyAddress());
+        company.setWebsite(request.getWebsite());
 
         employerRepository.save(employer);
 

@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
 @Entity
-@Table(name = "Сompany")
+@Table(name = "сompany")
 public class СompanyEntity extends user{
     private String companyName;
     private String position;

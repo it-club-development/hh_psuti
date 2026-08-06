@@ -17,7 +17,7 @@ public class StudentEntity extends user {
     private LocalDate birthDate;
     private String phoneNumber;
 
-    // Getters and Setters
+    // приём и отдача
     public String getUniversity() { return university; }
     public void setUniversity(String university) { this.university = university; }
     public String getFaculty() { return faculty; }
