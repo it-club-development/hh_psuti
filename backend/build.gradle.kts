@@ -19,7 +19,6 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
-	//обновление 26.07.26
 	implementation("org.springframework.boot:spring-boot-starter-web:3.4.0")		//Создаёт веб-приложение с REST API
 	implementation("org.springframework.boot:spring-boot-starter-security:3.4.0")	// Добавляет безопасность и шифрование паролей
 	implementation("io.jsonwebtoken:jjwt:0.12.6")							// Создаёт и проверяет JWT токены
@@ -31,6 +30,7 @@ dependencies {
 	//обновление 05.08.26
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	//
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("org.postgresql:postgresql")
