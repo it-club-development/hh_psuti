@@ -1,6 +1,6 @@
-package Models;
+package com.example.demo.Models;
 
-import General.Roles;
+import com.example.demo.General.Roles;
 import jakarta.persistence.*;
 import lombok.*;
 

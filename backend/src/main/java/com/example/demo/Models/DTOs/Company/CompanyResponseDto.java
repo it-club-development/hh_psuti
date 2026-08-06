@@ -1,4 +1,4 @@
-package Models.DTOs;
+package com.example.demo.Models.DTOs.Company;
 
 import java.util.UUID;
 

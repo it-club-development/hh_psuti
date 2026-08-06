@@ -1,11 +1,9 @@
-package Models;
+package com.example.demo.Models;
 
-import General.Roles;
 import jakarta.persistence.*;
 import lombok.*;
 
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -13,14 +11,17 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Company_entity {
+public class Student_entity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID User_ID;
-    private String Name;
-    private String Site;
-    private String Description;
-    private String Logo;
+    private String Full_name;
+    private String Group;
+    private String Course;
+    private String Direction;
+    private String Phone;
+    private String Avatar_url;
+    private boolean Visibility;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId

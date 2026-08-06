@@ -1,4 +1,4 @@
-package Repositories;
+package com.example.demo.Repositories;
 
 public interface IStudentRepository {
 }
