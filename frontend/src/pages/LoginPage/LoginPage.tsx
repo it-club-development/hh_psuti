@@ -4,10 +4,9 @@ import './LoginPage.css';
 const LoginPage: React.FC = () => {
   const [accepted, setAccepted] = useState(false);
 
-  const handleAccept = () => {
-    if (accepted) {
-      alert('Вход выполнен!');
-    }
+  const handleAgreementClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    alert('Здесь будет текст пользовательского соглашения');
   };
 
   return (
@@ -17,7 +16,16 @@ const LoginPage: React.FC = () => {
 
         <p className="agreement-text">
           Уважаемый пользователь!<br />
-          Для входа в личный кабинет вам необходимо принять условия пользовательского соглашения.
+          Для входа в личный кабинет вам необходимо принять{' '}
+          {/* ССЫЛКА НА ДОКУМЕНТ ДОБАВИТЬ  */}
+          <a 
+            href="#" 
+            className="agreement-link"
+            onClick={handleAgreementClick}
+          >
+            условия пользовательского соглашения
+          </a>
+        .
         </p>
 
         <label className="checkbox-label">
@@ -25,7 +33,9 @@ const LoginPage: React.FC = () => {
             type="checkbox"
             checked={accepted}
             onChange={(e) => setAccepted(e.target.checked)}
+            className="custom-checkbox"
           />
+          <span className="checkmark"></span>
           Принимаю пользовательское соглашение
         </label>
 
@@ -33,7 +43,6 @@ const LoginPage: React.FC = () => {
           <button className="btn-cancel">Отмена</button>
           <button
             className={`btn-accept ${accepted ? 'active' : ''}`}
-            onClick={handleAccept}
             disabled={!accepted}
           >
             Принять
