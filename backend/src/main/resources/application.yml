@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: backend
+
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase?sslmode=disable
+    username: myuser
+    password: secret
+
+  server:
+    port: 8080
+    servlet:
+      session:
+        cookie:
+          http-only: true
+          secure: false
+          same-site: lax
+
+  logging:
+    level:
+      com.backend: DEBUG
+      org.springframework.mail: DEBUG
+      com.backend.auth.service.EmailNotificationService: DEBUG
+      org.eclipse.angus.mail: TRACE
+      org.springframework.ai: DEBUG
+      org.springframework.web: DEBUG
