@@ -30,6 +30,14 @@ dependencies {
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	// обновление 13.08.2026
 	compileOnly("org.projectlombok:lombok:1.18.36")		//lombok
+
+	// ===== ТЕСТЫ =====
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.assertj:assertj-core")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	// H2 для тестов (встроенная БД)
+	testImplementation("com.h2database:h2")
+
 	//
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
