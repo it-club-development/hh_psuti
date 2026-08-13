@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "students")
 public class StudentEntity extends user {
+    private String Name;
     private String university;
     private String faculty;
     private Integer course;
@@ -18,6 +19,8 @@ public class StudentEntity extends user {
     private String phoneNumber;
 
     // приём и отдача
+    public String getName() {return Name;}
+    public void setName(String Name) {this.Name = Name;}
     public String getUniversity() { return university; }
     public void setUniversity(String university) { this.university = university; }
     public String getFaculty() { return faculty; }

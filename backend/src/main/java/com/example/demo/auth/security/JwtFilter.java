@@ -16,7 +16,10 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JWT_util jwtUtil;
 
+    @Autowired
+    private IpUtil ipUtil;  // ← ДЛЯ ЛОГИРОВАНИЯ IP
 
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain)
@@ -29,18 +32,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(token)) {
                 String email = jwtUtil.extractEmail(token);
-                System.out.println("✅ Аутентифицирован: " + email);
+                String ip = ipUtil.getClientIp(request);
+                System.out.println("✅ Аутентифицирован: " + email + " (IP: " + ip + ")");
                 request.setAttribute("email", email);
+                request.setAttribute("ip", ip);
             } else {
-                System.out.println("❌ Невалидный токен");
+                System.out.println("❌ Невалидный токен от: " + ipUtil.getClientIp(request));
             }
         }
 
         chain.doFilter(request, response);
-    }
-
-    @Override
-    protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {
-
     }
 }
