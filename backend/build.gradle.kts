@@ -19,10 +19,9 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.springframework.boot:spring-boot-starter-web:3.4.0")		//Создаёт веб-приложение с REST API
-	implementation("org.springframework.boot:spring-boot-starter-security:3.4.0")	// Добавляет безопасность и шифрование паролей
+	implementation("org.springframework.boot:spring-boot-starter-web")		//Создаёт веб-приложение с REST API
+	implementation("org.springframework.boot:spring-boot-starter-security")	// Добавляет безопасность и шифрование паролей
 	implementation("io.jsonwebtoken:jjwt:0.12.6")							// Создаёт и проверяет JWT токены
-	//implementation("javax.xml.bind:jaxb-api:4.0.1")							// Преобразует Java объекты в XML и обратно
 	//обновление 30.07.26
 	implementation("javax.servlet:javax.servlet-api:4.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -30,15 +29,8 @@ dependencies {
 	//обновление 05.08.26
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	// обновление 13.08.2026
-
 	compileOnly("org.projectlombok:lombok:1.18.36")		//lombok
-	//annotationProcessor("org.projectlombok:lombok:1.18.36")
-	//testCompileOnly("org.projectlombok:lombok:1.18.36")		//для тестов
-	//testAnnotationProcessor("org.projectlombok:lombok:1.18.36")		//для тестов
-
-
 	//
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("org.postgresql:postgresql")

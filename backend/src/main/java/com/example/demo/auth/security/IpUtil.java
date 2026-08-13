@@ -1,7 +1,7 @@
 package com.example.demo.auth.security;
 
+import jakarta.servlet.http.HttpServletRequest;  // ← ИСПРАВЛЕНО
 import org.springframework.stereotype.Component;
-import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class IpUtil {
@@ -25,7 +25,6 @@ public class IpUtil {
             ipAddress = request.getRemoteAddr();
         }
 
-        // Если через прокси - берём первый IP
         if (ipAddress != null && ipAddress.contains(",")) {
             ipAddress = ipAddress.split(",")[0].trim();
         }

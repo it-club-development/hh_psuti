@@ -21,9 +21,5 @@ spring:
 
   logging:
     level:
-      com.backend: DEBUG
-      org.springframework.mail: DEBUG
-      com.backend.auth.service.EmailNotificationService: DEBUG
-      org.eclipse.angus.mail: TRACE
-      org.springframework.ai: DEBUG
+      com.example.demo: DEBUG
       org.springframework.web: DEBUG
