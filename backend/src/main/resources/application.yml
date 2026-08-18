@@ -7,9 +7,22 @@ spring:
     import: optional:file:.env[.properties]
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydatabase?sslmode=disable
-    username: myuser
-    password: secret
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/hh_psuti?sslmode=disable
+    username: postgres
+    password: 1
+      ###   Из окружения
+    #url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:newsdb}
+      #username: ${DB_USER:your_username}
+      #password: ${DB_PASSWORD:your_password}
+    hikari:
+      ###   Какая нам нагрузка нужна?
+      maximum-pool-size: 50
+      minimum-idle: 10
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: HikariCP
 
   server:
     port: 8080
