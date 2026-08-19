@@ -9,7 +9,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(26)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -44,9 +44,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	// ===== ТЕСТЫ =====
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-
+	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test") // 👈 ЭТО ГЛАВНОЕ
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	//для проверки (много дубликатов)======================================================
-
+/*
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -80,7 +81,7 @@ dependencies {
 	testImplementation("org.assertj:assertj-core")
 	testImplementation("com.h2database:h2")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
+*/
 	// // // // // //
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
