@@ -1,11 +1,20 @@
 package com.example.demo.auth.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class user {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,11 +22,13 @@ public class user {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "sso_id", unique = true)
+    private String ssoId;  // ID из SSO
 
-    @Column(name = "ip_address")
-    private String ipAddress;   // новое
+    private String password;  // Для тестовой версии
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -25,27 +36,12 @@ public class user {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
-    // Конструкторы
-    public user() {}
+    @Column(name = "is_active")
+    private boolean isActive = true;
 
-    public user(String email, String password) {
-        this.email = email;
-        this.password = password;
-        this.createdAt = LocalDateTime.now();
-    }
+    @Column(name = "terms_accepted")
+    private boolean termsAccepted = false;  // Пользовательское соглашение
 
-    // Геттеры и сеттеры
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
-    public String getPassword() {return password;}
-    public void setPassword(String password) {this.password = password;}
-    public String getIpAddress() {return ipAddress;}
-    public void setIpAddress(String ipAddress) {this.ipAddress = ipAddress;}
-    public LocalDateTime getCreatedAt() {return createdAt;}
-    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
-    public LocalDateTime getLastLogin() {return lastLogin;}
-    public void setLastLogin(LocalDateTime lastLogin) {this.lastLogin = lastLogin;
-    }
+    @Column(name = "ip_address")
+    private String ipAddress;
 }

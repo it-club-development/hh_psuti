@@ -37,7 +37,8 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	// H2 для тестов (встроенная БД)
 	testImplementation("com.h2database:h2")
-
+	//обновление 19.08.2026
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	//
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")

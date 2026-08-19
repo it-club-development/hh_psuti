@@ -24,3 +24,28 @@ spring:
     level:
       com.example.demo: DEBUG
       org.springframework.web: DEBUG
+# ===== JWT =====
+jwt:
+  secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
+  access-expiration: 900000   # 15 минут
+  refresh-expiration: 2592000000  # 30 дней
+
+# ===== 1С ИНТЕГРАЦИЯ =====
+integration:
+  one-c:
+    base-url: ${ONE_C_URL:http://localhost:8081/api}
+    timeout: 5000
+    retry:
+      attempts: 3
+      delay: 1000
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.example.demo: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate: WARN
+    org.springframework.data.redis: WARN

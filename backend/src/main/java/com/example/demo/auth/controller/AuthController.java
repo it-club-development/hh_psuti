@@ -1,11 +1,15 @@
 package com.example.demo.auth.controller;
 
 import com.example.demo.auth.dto.RegisterRequest;
+import com.example.demo.auth.dto.AuthResponse;
+import com.example.demo.auth.model.Role;
+import com.example.demo.auth.model.StudentEntity;
 import com.example.demo.auth.model.user;
 import com.example.demo.auth.security.IpUtil;
 import com.example.demo.auth.security.JWT_util;
 import com.example.demo.auth.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;  // ← ИСПРАВЛЕНО
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")  // ← Изменено на /api/auth
 public class AuthController {
 
     @Autowired
@@ -31,56 +35,71 @@ public class AuthController {
     @Autowired
     private IpUtil ipUtil;
 
-    // ===== ЛОГИН =====
+    // ===== ВХОД (SSO - для теста ручная регистрация) =====
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody user loginRequest,
+    public ResponseEntity<?> login(@RequestBody RegisterRequest loginRequest,
                                    HttpServletRequest request) {
 
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
 
-        // Получаем IP адрес (БЕЗ ПРИВЕДЕНИЯ ТИПОВ)
         String ipAddress = ipUtil.getClientIp(request);
         System.out.println("🔐 Попытка входа с IP: " + ipAddress);
 
-        if (!userService.userExists(email)) {
-            System.out.println("❌ Пользователь не найден: " + email);
+        user user = userService.getUserByEmail(email);
+        if (user == null) {
             return ResponseEntity.status(401).body(Map.of(
                     "error", "Пользователь не найден"
             ));
         }
 
-        String storedPassword = userService.getPassword(email);
-        if (!passwordEncoder.matches(password, storedPassword)) {
-            System.out.println("❌ Неверный пароль для: " + email);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             return ResponseEntity.status(401).body(Map.of(
                     "error", "Неверный пароль"
             ));
         }
 
+        // Проверка принятия пользовательского соглашения
+        if (!user.isTermsAccepted()) {
+            return ResponseEntity.status(403).body(Map.of(
+                    "error", "Необходимо принять пользовательское соглашение",
+                    "needAcceptTerms", true,
+                    "userId", user.getId()
+            ));
+        }
+
         userService.updateLastLogin(email, ipAddress);
         String token = jwtUtil.generateToken(email);
-        System.out.println("✅ Успешный вход: " + email + " (IP: " + ipAddress + ")");
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
-        response.put("email", email);
-        response.put("message", "Успешный вход");
+        AuthResponse response = new AuthResponse();
+        response.setToken(token);
+        response.setEmail(email);
+        response.setRole(user.getRole().name());
+        response.setMessage("Успешный вход");
 
         return ResponseEntity.ok(response);
     }
 
-    // ===== РЕГИСТРАЦИЯ =====
+    // ===== РЕГИСТРАЦИЯ (для тестовой версии) =====
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest,
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest,
                                       HttpServletRequest request) {
 
         String email = registerRequest.getEmail();
         String password = registerRequest.getPassword();
+        String confirmPassword = registerRequest.getConfirmPassword();
+
+        // Проверка совпадения паролей
+        if (!password.equals(confirmPassword)) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Пароли не совпадают"
+            ));
+        }
 
         String ipAddress = ipUtil.getClientIp(request);
         System.out.println("📝 Попытка регистрации с IP: " + ipAddress);
 
+        // Валидация
         if (email == null || email.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(
                     "error", "Email не может быть пустым"
@@ -100,13 +119,19 @@ public class AuthController {
         }
 
         if (userService.userExists(email)) {
-            System.out.println("❌ Пользователь уже существует: " + email);
             return ResponseEntity.status(409).body(Map.of(
                     "error", "Пользователь с таким email уже существует"
             ));
         }
 
-        user newUser = new user(email, password);
+        // Создание пользователя
+        user newUser = new user();
+        newUser.setEmail(email);
+        newUser.setPassword(passwordEncoder.encode(password));
+        newUser.setRole(Role.STUDENT);  // По умолчанию студент
+        newUser.setCreatedAt(LocalDateTime.now());
+        newUser.setActive(true);
+        newUser.setTermsAccepted(false);  // Требует принятия соглашения
         newUser.setIpAddress(ipAddress);
 
         boolean registered = userService.registerUser(newUser);
@@ -118,7 +143,10 @@ public class AuthController {
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("email", email);
-            response.put("message", "Регистрация успешно завершена");
+            response.put("role", "STUDENT");
+            response.put("message", "Регистрация успешна. Пожалуйста, примите пользовательское соглашение.");
+            response.put("needAcceptTerms", true);
+            response.put("userId", userService.getUserByEmail(email).getId());
 
             return ResponseEntity.status(201).body(response);
         } else {
@@ -128,10 +156,35 @@ public class AuthController {
         }
     }
 
+    // ===== ПРИНЯТИЕ ПОЛЬЗОВАТЕЛЬСКОГО СОГЛАШЕНИЯ =====
+    @PostMapping("/accept-terms")
+    public ResponseEntity<?> acceptTerms(@RequestParam Long userId) {
+        boolean accepted = userService.acceptTerms(userId);
+        if (accepted) {
+            return ResponseEntity.ok(Map.of(
+                    "message", "Пользовательское соглашение принято",
+                    "termsAccepted", true
+            ));
+        } else {
+            return ResponseEntity.status(404).body(Map.of(
+                    "error", "Пользователь не найден"
+            ));
+        }
+    }
+
+    // ===== ПРОВЕРКА СОГЛАШЕНИЯ =====
+    @GetMapping("/check-terms/{userId}")
+    public ResponseEntity<?> checkTerms(@PathVariable Long userId) {
+        boolean accepted = userService.isTermsAccepted(userId);
+        return ResponseEntity.ok(Map.of(
+                "termsAccepted", accepted
+        ));
+    }
+
     // ===== ПРОВЕРКА IP =====
     @GetMapping("/my-ip")
     public ResponseEntity<?> getMyIp(HttpServletRequest request) {
-        String ip = ipUtil.getClientIp(request);  // БЕЗ ПРИВЕДЕНИЯ ТИПОВ
+        String ip = ipUtil.getClientIp(request);
         return ResponseEntity.ok(Map.of(
                 "ip", ip,
                 "timestamp", LocalDateTime.now()
