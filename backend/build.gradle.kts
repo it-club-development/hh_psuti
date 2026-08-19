@@ -21,25 +21,67 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")		//Создаёт веб-приложение с REST API
 	implementation("org.springframework.boot:spring-boot-starter-security")	// Добавляет безопасность и шифрование паролей
-	implementation("io.jsonwebtoken:jjwt:0.12.6")							// Создаёт и проверяет JWT токены
+	implementation("io.jsonwebtoken:jjwt:0.12.6") 							// Создаёт и проверяет JWT токены
+
 	//обновление 30.07.26
 	implementation("javax.servlet:javax.servlet-api:4.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql")
+
 	//обновление 05.08.26
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
 	// обновление 13.08.2026
 	compileOnly("org.projectlombok:lombok:1.18.36")		//lombok
-
 	// ===== ТЕСТЫ =====
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.assertj:assertj-core")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	// H2 для тестов (встроенная БД)
 	testImplementation("com.h2database:h2")
+
 	//обновление 19.08.2026
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	//
+	// ===== ТЕСТЫ =====
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	//для проверки (много дубликатов)======================================================
+
+	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+	// ===== JWT =====
+	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
+	// ===== БАЗА ДАННЫХ =====
+	implementation("org.postgresql:postgresql")
+
+	// ===== JACKSON =====
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+	// ===== LOMBOK (ОБНОВЛЕНО) =====
+	compileOnly("org.projectlombok:lombok:1.18.34")
+	annotationProcessor("org.projectlombok:lombok:1.18.34")
+	testCompileOnly("org.projectlombok:lombok:1.18.34")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
+
+	// ===== DEVTOOLS =====
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+
+	// ===== ТЕСТЫ =====
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.assertj:assertj-core")
+	testImplementation("com.h2database:h2")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// // // // // //
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("org.postgresql:postgresql")

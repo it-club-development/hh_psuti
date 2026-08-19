@@ -1,17 +1,9 @@
 package com.example.demo.auth.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class user {
 
@@ -22,13 +14,11 @@ public class user {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(name = "sso_id", unique = true)
-    private String ssoId;  // ID из SSO
+    @Column(nullable = false)
+    private String password;
 
-    private String password;  // Для тестовой версии
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "ip_address")
+    private String ipAddress;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -36,12 +26,94 @@ public class user {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Column(name = "is_active")
     private boolean isActive = true;
 
     @Column(name = "terms_accepted")
-    private boolean termsAccepted = false;  // Пользовательское соглашение
+    private boolean termsAccepted = false;
 
-    @Column(name = "ip_address")
-    private String ipAddress;
+    // ===== КОНСТРУКТОРЫ =====
+    public user() {}
+
+    public user(String email, String password) {
+        this.email = email;
+        this.password = password;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // ===== ГЕТТЕРЫ И СЕТТЕРЫ =====
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isTermsAccepted() {
+        return termsAccepted;
+    }
+
+    public void setTermsAccepted(boolean termsAccepted) {
+        this.termsAccepted = termsAccepted;
+    }
 }
