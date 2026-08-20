@@ -1,4 +1,4 @@
-package com.example.demo.auth.model;
+package com.example.demo.Models;
 
 import com.example.demo.General.Roles;
 import jakarta.persistence.*;
