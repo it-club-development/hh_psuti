@@ -1,7 +1,7 @@
 package com.example.demo.auth.service;
 
-import com.example.demo.auth.model.Role;
-import com.example.demo.auth.model.user;
+import com.example.demo.General.Roles;
+import com.example.demo.Models.User_entity;
 import com.example.demo.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -24,25 +24,21 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    public user getUser(String email) {
-        return getUserByEmail(email);
-    }
-
-    public user getUserByEmail(String email) {
+    public User_entity getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-    public user getUserById(Long id) {
+    public User_entity getUserById(UUID id) {
         return userRepository.findById(id).orElse(null);
     }
 
     public String getPassword(String email) {
-        user user = getUserByEmail(email);
-        return user != null ? user.getPassword() : null;
+        User_entity user = getUserByEmail(email);
+        return user != null ? user.getPasswordHash() : null;
     }
 
     @Transactional
-    public boolean registerUser(user newUser) {
+    public boolean registerUser(User_entity newUser) {
         String email = newUser.getEmail();
 
         if (userExists(email)) {
@@ -59,7 +55,7 @@ public class UserService {
 
     @Transactional
     public void updateLastLogin(String email, String ipAddress) {
-        user user = getUserByEmail(email);
+        User_entity user = getUserByEmail(email);
         if (user != null) {
             user.setLastLogin(LocalDateTime.now());
             user.setIpAddress(ipAddress);
@@ -68,8 +64,8 @@ public class UserService {
     }
 
     @Transactional
-    public boolean acceptTerms(Long userId) {
-        user user = getUserById(userId);
+    public boolean acceptTerms(UUID userId) {
+        User_entity user = getUserById(userId);
         if (user != null) {
             user.setTermsAccepted(true);
             userRepository.save(user);
@@ -78,14 +74,14 @@ public class UserService {
         return false;
     }
 
-    public boolean isTermsAccepted(Long userId) {
-        user user = getUserById(userId);
+    public boolean isTermsAccepted(UUID userId) {
+        User_entity user = getUserById(userId);
         return user != null && user.isTermsAccepted();
     }
 
     @Transactional
-    public void changeRole(Long userId, Role role) {
-        user user = getUserById(userId);
+    public void changeRole(UUID userId, Roles role) {
+        User_entity user = getUserById(userId);
         if (user != null) {
             user.setRole(role);
             userRepository.save(user);

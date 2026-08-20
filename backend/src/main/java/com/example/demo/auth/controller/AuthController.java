@@ -1,9 +1,10 @@
 package com.example.demo.auth.controller;
 
+import com.example.demo.General.Roles;
+import com.example.demo.Models.Student_entity;
+import com.example.demo.Models.User_entity;
 import com.example.demo.auth.dto.AuthResponse;
 import com.example.demo.auth.dto.RegisterRequest;
-import com.example.demo.auth.model.Role;
-import com.example.demo.auth.model.user;
 import com.example.demo.auth.security.IpUtil;
 import com.example.demo.auth.security.JWT_util;
 import com.example.demo.auth.service.UserService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -44,14 +46,14 @@ public class AuthController {
         String ipAddress = ipUtil.getClientIp(request);
         System.out.println("🔐 Попытка входа с IP: " + ipAddress);
 
-        user user = userService.getUserByEmail(email);
+        User_entity user = userService.getUserByEmail(email);
         if (user == null) {
             return ResponseEntity.status(401).body(Map.of(
                     "error", "Пользователь не найден"
             ));
         }
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
             return ResponseEntity.status(401).body(Map.of(
                     "error", "Неверный пароль"
             ));
@@ -61,7 +63,7 @@ public class AuthController {
             return ResponseEntity.status(403).body(Map.of(
                     "error", "Необходимо принять пользовательское соглашение",
                     "needAcceptTerms", true,
-                    "userId", user.getId()
+                    "userId", user.getId().toString()
             ));
         }
 
@@ -118,10 +120,10 @@ public class AuthController {
             ));
         }
 
-        user newUser = new user();
+        User_entity newUser = new Student_entity();
         newUser.setEmail(email);
-        newUser.setPassword(passwordEncoder.encode(password));
-        newUser.setRole(Role.STUDENT);
+        newUser.setPasswordHash(passwordEncoder.encode(password));
+        newUser.setRole(Roles.Student);
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setActive(true);
         newUser.setTermsAccepted(false);
@@ -139,7 +141,7 @@ public class AuthController {
             response.put("role", "STUDENT");
             response.put("message", "Регистрация успешна. Пожалуйста, примите пользовательское соглашение.");
             response.put("needAcceptTerms", true);
-            response.put("userId", userService.getUserByEmail(email).getId());
+            response.put("userId", userService.getUserByEmail(email).getId().toString());
 
             return ResponseEntity.status(201).body(response);
         } else {
@@ -150,8 +152,9 @@ public class AuthController {
     }
 
     @PostMapping("/accept-terms")
-    public ResponseEntity<?> acceptTerms(@RequestParam Long userId) {
-        boolean accepted = userService.acceptTerms(userId);
+    public ResponseEntity<?> acceptTerms(@RequestParam String userId) {
+        UUID uuid = UUID.fromString(userId);
+        boolean accepted = userService.acceptTerms(uuid);
         if (accepted) {
             return ResponseEntity.ok(Map.of(
                     "message", "Пользовательское соглашение принято",
@@ -165,8 +168,9 @@ public class AuthController {
     }
 
     @GetMapping("/check-terms/{userId}")
-    public ResponseEntity<?> checkTerms(@PathVariable Long userId) {
-        boolean accepted = userService.isTermsAccepted(userId);
+    public ResponseEntity<?> checkTerms(@PathVariable String userId) {
+        UUID uuid = UUID.fromString(userId);
+        boolean accepted = userService.isTermsAccepted(uuid);
         return ResponseEntity.ok(Map.of(
                 "termsAccepted", accepted
         ));

@@ -3,25 +3,28 @@ package com.example.demo.Models;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-import java.util.UUID;
-
 @Entity
-@Table(name="Companies")
+@Table(name = "companies")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Company_entity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID User_ID;
-    private String Name;
-    private String Site;
-    private String Description;
-    private String Logo;
+@AllArgsConstructor
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Company_entity extends User_entity {
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "User_ID")
-    private User_entity user;
+    @Column(name = "company_name")
+    private String companyName;
+
+    private String description;
+
+    private String site;
+
+    @Column(name = "logo_url")
+    private String logoUrl;
+
+    @Column(name = "contact_phone")
+    private String contactPhone;
+
+    @Column(name = "contact_email")
+    private String contactEmail;
 }

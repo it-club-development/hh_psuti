@@ -1,9 +1,13 @@
 package com.example.demo.auth.repository;
 
-import com.example.demo.auth.model.StudentEntity;
+import com.example.demo.Models.Student_entity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
-public interface  StudentRepository extends JpaRepository<StudentEntity, Long>{
-    Optional<StudentEntity> findByEmail(String email);
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface StudentRepository extends JpaRepository<Student_entity, UUID> {
+    Optional<Student_entity> findByEmail(String email);
 }
