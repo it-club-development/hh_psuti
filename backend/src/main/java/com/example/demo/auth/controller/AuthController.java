@@ -1,6 +1,7 @@
 package com.example.demo.auth.controller;
 
 import com.example.demo.General.Roles;
+import com.example.demo.Models.Company_entity;
 import com.example.demo.Models.Student_entity;
 import com.example.demo.Models.User_entity;
 import com.example.demo.auth.dto.AuthResponse;
@@ -86,6 +87,7 @@ public class AuthController {
         String email = registerRequest.getEmail();
         String password = registerRequest.getPassword();
         String confirmPassword = registerRequest.getConfirmPassword();
+        String role = registerRequest.getRole();  // ← ДОБАВЛЕНО
 
         if (!password.equals(confirmPassword)) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -120,10 +122,24 @@ public class AuthController {
             ));
         }
 
-        User_entity newUser = new Student_entity();
+        // Создаём пользователя в зависимости от роли
+        User_entity newUser;
+        Roles userRole;
+
+        if (role != null && role.equalsIgnoreCase("COMPANY")) {
+            newUser = new Company_entity();
+            userRole = Roles.Company;
+        } else if (role != null && role.equalsIgnoreCase("ADMIN")) {
+            newUser = new User_entity();  // Админ использует базовую модель
+            userRole = Roles.Admin;
+        } else {
+            newUser = new Student_entity();
+            userRole = Roles.Student;
+        }
+
         newUser.setEmail(email);
         newUser.setPasswordHash(passwordEncoder.encode(password));
-        newUser.setRole(Roles.Student);
+        newUser.setRole(userRole);
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setActive(true);
         newUser.setTermsAccepted(false);
@@ -133,12 +149,12 @@ public class AuthController {
 
         if (registered) {
             String token = jwtUtil.generateToken(email);
-            System.out.println("✅ Успешная регистрация: " + email + " (IP: " + ipAddress + ")");
+            System.out.println("✅ Успешная регистрация: " + email + " (Роль: " + userRole + ", IP: " + ipAddress + ")");
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("email", email);
-            response.put("role", "STUDENT");
+            response.put("role", userRole.name());
             response.put("message", "Регистрация успешна. Пожалуйста, примите пользовательское соглашение.");
             response.put("needAcceptTerms", true);
             response.put("userId", userService.getUserByEmail(email).getId().toString());
@@ -188,9 +204,24 @@ public class AuthController {
     @GetMapping("/check/{email}")
     public ResponseEntity<?> checkUser(@PathVariable String email) {
         boolean exists = userService.userExists(email);
-        return ResponseEntity.ok(Map.of(
-                "email", email,
-                "exists", exists
-        ));
+        User_entity user = userService.getUserByEmail(email);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("email", email);
+        response.put("exists", exists);
+
+        if (user != null) {
+            response.put("role", user.getRole() != null ? user.getRole().name() : "STUDENT");
+            response.put("termsAccepted", user.isTermsAccepted());
+            response.put("isActive", user.isActive());
+            response.put("userId", user.getId().toString());
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 }

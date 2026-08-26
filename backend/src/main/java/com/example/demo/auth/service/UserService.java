@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,6 +36,10 @@ public class UserService {
     public String getPassword(String email) {
         User_entity user = getUserByEmail(email);
         return user != null ? user.getPasswordHash() : null;
+    }
+
+    public List<User_entity> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Transactional
