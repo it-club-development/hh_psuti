@@ -45,11 +45,7 @@ public class User_entity {
     @Column(name = "terms_accepted")
     private boolean termsAccepted = false;
 
-    // ===== КОНСТРУКТОРЫ =====
-    // Без параметров (нужен для JPA)
-    public User_entity() {}
-
-    // С параметрами
+    // ===== КОНСТРУКТОР С ПАРАМЕТРАМИ (дополнительный) =====
     public User_entity(String email, String passwordHash) {
         this.email = email;
         this.passwordHash = passwordHash;
@@ -58,76 +54,5 @@ public class User_entity {
         this.termsAccepted = false;
     }
 
-    // ===== ГЕТТЕРЫ И СЕТТЕРЫ (явно прописываем) =====
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public Roles getRole() {
-        return role;
-    }
-
-    public void setRole(Roles role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(LocalDateTime lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public boolean isTermsAccepted() {
-        return termsAccepted;
-    }
-
-    public void setTermsAccepted(boolean termsAccepted) {
-        this.termsAccepted = termsAccepted;
-    }
+    // Геттеры и сеттеры генерируются через Lombok (@Getter, @Setter)
 }

@@ -32,7 +32,15 @@ dependencies {
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	// обновление 13.08.2026
+	/*
 	compileOnly("org.projectlombok:lombok:1.18.36")		//lombok
+	*/
+	// ===== LOMBOK =====
+	compileOnly("org.projectlombok:lombok:1.18.36")
+	annotationProcessor("org.projectlombok:lombok:1.18.36")
+	testCompileOnly("org.projectlombok:lombok:1.18.36")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
+
 	// ===== ТЕСТЫ =====
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.assertj:assertj-core")
