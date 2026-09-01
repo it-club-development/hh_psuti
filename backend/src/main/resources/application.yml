@@ -24,16 +24,33 @@ spring:
       connection-timeout: 30000
       pool-name: HikariCP
 
+  jpa:
+    hibernate:
+      ddl-auto: update #Эту штуку потом лучше заменить на validate или на миграции
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+threads:
+  virtual:
+    enabled: true
+
   server:
     port: 8080
     servlet:
       session:
         cookie:
           http-only: true
-          secure: false
+          secure: true
           same-site: lax
 
   logging:
     level:
+      root: INFO
       com.example.demo: DEBUG
       org.springframework.web: DEBUG
+      org.hibernate.SQL: DEBUG
+    file:
+      name: logs/hh_logs.log

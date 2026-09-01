@@ -3,9 +3,10 @@ package com.example.demo.auth.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import javax.crypto.SecretKey;
 
 @Component
 public class JWT_util {

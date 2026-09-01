@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   postgres:
-    image: 'postgres:17'
+    image: 'postgres:18'
     container_name: spring-database
     restart: unless-stopped
     # env_file: ./hh_psuti.env     в .gitignore
@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: 1
       POSTGRES_USER: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
-      volumes:
+    volumes:
       - pgdata:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d:ro
     ports:

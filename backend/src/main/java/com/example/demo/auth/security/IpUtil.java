@@ -1,6 +1,6 @@
 package com.example.demo.auth.security;
 
-import jakarta.servlet.http.HttpServletRequest;  // ← ИСПРАВЛЕНО
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 @Component

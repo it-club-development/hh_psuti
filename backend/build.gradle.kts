@@ -18,6 +18,10 @@ repositories {
 }
 
 dependencies {
+	implementation("org.mapstruct:mapstruct:1.5.5.Final")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
+
+
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")		//Создаёт веб-приложение с REST API
 	implementation("org.springframework.boot:spring-boot-starter-security")	// Добавляет безопасность и шифрование паролей
@@ -44,6 +48,8 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+
 }
 
 tasks.withType<Test> {

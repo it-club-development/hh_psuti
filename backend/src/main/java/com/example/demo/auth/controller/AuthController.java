@@ -5,7 +5,7 @@ import com.example.demo.auth.model.user;
 import com.example.demo.auth.security.IpUtil;
 import com.example.demo.auth.security.JWT_util;
 import com.example.demo.auth.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;  // ← ИСПРАВЛЕНО
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
