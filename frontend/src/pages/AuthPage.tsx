@@ -23,10 +23,11 @@ const AuthPage = ({ onLogin, onRegister }: AuthPageProps) => {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
                     <AuthHeader title={isLogin ? "Вход" : "Регистрация"} />
 
+                    {/* Ключ заставляет React пересоздавать форму при смене режима, сбрасывая все состояния */}
                     {isLogin ? (
-                        <LoginForm onSuccess={onLogin} />
+                        <LoginForm key="login" onSuccess={onLogin} />
                     ) : (
-                        <RegisterForm onSuccess={onRegister} />
+                        <RegisterForm key="register" onSuccess={onRegister} />
                     )}
 
                     <SocialButtons />

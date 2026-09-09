@@ -8,9 +8,9 @@ interface CompanyProfileProps {
 }
 
 const company = {
-  name: 'ИП Иванов',
-  email: 'ivan@mail.ru',
-  phone: '+7 987 45 56 12 2',
+  name: "ИП Иванов",
+  email: "ivan@mail.ru",
+  phone: "+7 987 456-12-12", // исправленный формат, 11 цифр (без учёта +7)
 };
 
 const CompanyProfile = ({ onLogout }: CompanyProfileProps) => {

@@ -1,80 +1,73 @@
 import { useState } from "react";
-import {
-    HiOutlineMail,
-    HiOutlineLockClosed,
-    HiOutlineEye,
-    HiOutlineEyeOff,
-} from "react-icons/hi";
+import { HiOutlineMail } from "react-icons/hi";
+import InputField from "./InputField";
+import PasswordField from "./PasswordField";
 
 interface LoginFormProps {
     onSuccess: () => void;
 }
 
 const LoginForm = ({ onSuccess }: LoginFormProps) => {
-    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Здесь можно добавить реальную проверку, сейчас просто имитация
+        console.log("Login data:", { email, password });
         onSuccess();
+    };
+
+    const handleForgotPassword = (e: React.MouseEvent) => {
+        e.preventDefault();
+        alert("Переход на страницу восстановления пароля");
+    };
+
+    const handleEmailInvalid = (e: React.InvalidEvent<HTMLInputElement>) => {
+        e.currentTarget.setCustomValidity("Электронная почта содержит недопустимые символы (например, ';')");
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.currentTarget.setCustomValidity("");
+        setEmail(e.target.value);
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-5">
-            {/* поля такие же, как были */}
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Электронная почта
-                </label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <HiOutlineMail className="w-5 h-5 opacity-50" />
-                    </div>
-                    <input
-                        type="email"
-                        required
-                        className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
-                        placeholder="ivan@mail.ru"
-                    />
-                </div>
-            </div>
+            <InputField
+                id="login-email"
+                label="Электронная почта"
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                onInvalid={handleEmailInvalid}
+                placeholder="ivan@mail.ru"
+                icon={<HiOutlineMail className="w-5 h-5 opacity-50" />}
+                required
+            />
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Пароль
-                </label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <HiOutlineLockClosed className="w-5 h-5 opacity-50" />
-                    </div>
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        required
-                        className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
-                        placeholder="••••••••"
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                    >
-                        {showPassword ? (
-                            <HiOutlineEyeOff className="w-5 h-5" />
-                        ) : (
-                            <HiOutlineEye className="w-5 h-5" />
-                        )}
-                    </button>
-                </div>
-            </div>
+            <PasswordField
+                id="login-password"
+                label="Пароль"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+            />
 
             <div className="flex items-center justify-between">
                 <label className="flex items-center text-sm text-gray-700">
-                    <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" />
+                    <input
+                        type="checkbox"
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
+                    />
                     Запомнить меня
                 </label>
-                <a href="#" className="text-sm text-blue-600 hover:underline">
+                <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="text-sm text-blue-600 hover:underline"
+                >
                     Забыли пароль?
-                </a>
+                </button>
             </div>
 
             <button
